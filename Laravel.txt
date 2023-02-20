@@ -1,0 +1,35 @@
+Laravel 
+Ajout de la cle etrangere :
+on a les table projet et phase : d'ou la cle primaire de projet va migrer dans phase : d'ou les attribut
+projet(id, .......) -> model Projet -> table ->projets
+phase(id,#idprojet......) -> Phase -> table ->phases
+creation de la table phase avec la cle etrangere
+{
+ $table ->foreignId('projet_id')->constrained();
+}
+la convention sur laravel pour la cle etrangere est on met : nomdelatable_laClePrimaire ===> (projet_id) :
+larvel va chercher la table projets et recupere l'id puit cree la cle etrangere avec
+
+apres on lie encore les models : on vient dans le model phase 
+
+-quand on a many to many  => ca ve dire les deux tables vont creer une 3em table qui va recuperer les deux cles primaires des 
+deux tables sous forme de cle trangere
+
+-One to many: la table avec la cardinalite la plus faible va heriter de la cle primaire de l'autre table
+dans  le model Phase  on cree
+
+public function projet(){
+  return $this->belongsTo(Projet::Class);
+}
+
+dans le ModelProjet 
+public phases(){
+ return $this->hasMany(Phase::class); 
+}
+
+pour generer toutes les route on utilise la commande 
+Route::ressource("nom_model(au pluriel)",ModelControlleur::class); => Route::ressource('phases',PhaseController::class);
+
+pour generer le controller avec les functions generiques on utilise la commande :php artisan make:Controller ModelContoller -r;
+pour generer la migration en meme temps que le model correspondant on utilise la commande: 
+php artisan make:model nom_model -m(on rajoute c si on veut aussi creer le Controller correspondant)
